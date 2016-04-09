@@ -29,21 +29,35 @@ switch (process.argv[2]){
   case 'spotify-this-song':
     console.log("spotify switch");
     //spotify info
-    Spotify.search({ type: 'track', query: process.argv[3] }, function(err, data) {
+    var querySong;
+    if (process.argv[3] != '' && process.argv[3]!= null){
+      querySong = process.argv[3];
+    }else{
+      querySong = 'what\'s my age again';
+    }
+    Spotify.search({ type: 'track', query: querySong }, function(err, data) {
         if ( err ) {
             console.log('Error occurred: ' + err);
             return;
         }
-        //var json = JSON.parse(data);
-        console.log(data);
+        var songResults = data.tracks.items;
+        //console.log(songs);
         // Do something with 'data' 
+        for (var i = 0; i < songResults.length; i++){
+          console.log(i+1);
+          console.log('artist(s): ' + songResults[i].artists);
+          console.log('song name: ' + songResults[i].name);
+          console.log('preview song: ' + songResults[i].preview_url);
+          console.log('album: ' + songResults[i].album.name);
+          console.log('-----------------------------------');
+        }
     });   
     break;
   case 'movie-this':
     console.log("movie switch");
     ///movie info
     var movieString;
-    if (process.argv[3] != '' && process.argv[3] != null){ //check if a title is specifies
+    if (process.argv[3] != '' && process.argv[3] != null){ //check if a title is specified
       movieString = process.argv[3].trim();
     }else{
       movieString = 'Mr.+Nobody'; //use 'Mr. Nobody' if no title is specified
